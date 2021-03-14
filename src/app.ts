@@ -19,55 +19,78 @@ mongoose.connect(url_mongo)// faz a conexão com o banco de dados
   })
 
 //CREATE
-app.post('/send',jsonParser, (req, res, next) => {
+app.post('/letter', jsonParser, (req, res, next) => {
   let the_letter = new Letter(req.body)
-  console.log("/send")
+  console.log("CREATE")
   the_letter.save();
   res.json(the_letter)
 })
 //READ ALL
-app.get('/letter',jsonParser, (req, res, next) => {
-  let the_letter = new Letter(req.body)
-  console.log("/letter")
-  the_letter.find().then(letters=>{
+app.get('/letter', jsonParser, (req, res, next) => {
+  //let the_letter = new Letter(req.body)
+  console.log("READ ALL")
+  Letter.find().then(letters => {
     res.status(200)
     res.json(letters)
     return next()
-})
+  })
 })
 //READ ONE
-app.get('/letter/:letter_id([0-9a-fA-F]{24})',jsonParser, (req, res, next) => {
-  let the_letter = new Letter(req.body)
-  the_letter.findById(req.params.letter_id).then(letters=>{
-    if(letters){//Caso o resultado não seja nulo, quer dizer que encontramos um registro para mostrar
-        res.status(200)
-        res.json(letters)
+app.get('/letter/:letter_id([0-9a-fA-F]{24})', jsonParser, (req, res, next) => {
+  console.log("READ ONE")
+  //let the_letter = new Letter(req.body)
+  Letter.findById(req.params.letter_id).then(letters => {
+    if (letters) {//Caso o resultado não seja nulo, quer dizer que encontramos um registro para mostrar
+      res.status(200)
+      res.json(letters)
     }
-    else{//Caso contrário, quer dizer que não encontramos um registro
-        res.status(404)
-        res.json({message: 'not found'})
+    else {//Caso contrário, quer dizer que não encontramos um registro
+      res.status(404)
+      res.json({ message: 'not found' })
     }
     return next()
+  })
 })
+//UPDATE
+app.patch('/letter/:letter_id([0-9a-fA-F]{24})', jsonParser, async (req, res, next) => {
+  //let the_letter = new Letter(req.body)
+  console.log("UPDATE")
+  try {
+    let id = req.params.letter_id; //Recebendo o valor do id da URL
+    //console.log(req.body)
+    let result = await Letter.findByIdAndUpdate(id, req.body).lean(); //Buscando pessoa por id e atualizando seus dados
+    if (result != null) { //Caso o resultado não seja nulo, quer dizer que encontramos um registro para atulizar e ele foi atualizado
+      let the_letter = await Letter.findById(id); //Buscamos o registro atualizado
+      res.status(200)
+      res.json({ message: "Updated" })
+    } else {//Caso contrário, quer dizer que não encontramos um registro
+      res.status(404)
+      res.json({ message: 'Not Found' })
+    }
+  } catch (error) {
+    res.status(400)
+    res.json({ message: error })
+  }
 })
-// //UPDATE
-// app.post('/send',jsonParser, (req, res, next) => {
-//   let the_letter = new Letter(req.body)
-//   console.log(the_letter)
-//   the_letter.save().then(
-
-//   );
-//   res.json(the_letter)
-// })
-// //DELETE
-// app.post('/send',jsonParser, (req, res, next) => {
-//   let the_letter = new Letter(req.body)
-//   console.log(the_letter)
-//   the_letter.save().then(
-
-//   );
-//   res.json(the_letter)
-// })
+//DELETE
+app.del('/letter', jsonParser, async (req, res, next) => {
+  console.log("DELETE")
+  try {
+    let id = req.body.id; //Recebendo o valor do id da URL]
+    //console.log(id)
+    let result = await Letter.findByIdAndDelete(id);
+    if (result != null) { //Caso o resultado não seja nulo, quer dizer que encontramos um registro para excluir e ele foi excluido
+      res.status(200)
+      res.json({ message: "Deleted" })
+    } else {//Caso contrário, quer dizer que não encontramos um registro
+      res.status(404)
+      res.json({ result: 'Not Found' })
+    }
+  } catch (error) {
+    res.status(400)
+    res.json({ message: error })
+  }
+})
 
 
 
