@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "77bbf690-53a8-465f-a447-6d7b8a0861b0",
+		"name": "Zappts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Send Letter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"from\":\"Olaf\",\r\n        \"to\": \"Santa Claus\",\r\n        \"body\": \"Warm Hug\"\r\n}"
+				},
+				"url": {
+					"raw": "https://zappts-crud.herokuapp.com/letter",
+					"protocol": "https",
+					"host": [
+						"zappts-crud",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"letter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Letters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://zappts-crud.herokuapp.com/letter",
+					"protocol": "https",
+					"host": [
+						"zappts-crud",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"letter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get 1 letter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://zappts-crud.herokuapp.com/letter/604f4198e5fd6000153de7a5",
+					"protocol": "https",
+					"host": [
+						"zappts-crud",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"letter",
+						"604f4198e5fd6000153de7a5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Letter",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"from\":\"Olaf\",\r\n        \"to\": \"Papai Noel\",\r\n        \"body\": \"Abraços quentinhos.\"\r\n}"
+				},
+				"url": {
+					"raw": "https://zappts-crud.herokuapp.com/letter/604f4198e5fd6000153de7a5",
+					"protocol": "https",
+					"host": [
+						"zappts-crud",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"letter",
+						"604f4198e5fd6000153de7a5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Letter",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"604e8be0f721d600151bcb11\"\n}"
+				},
+				"url": {
+					"raw": "https://zappts-crud.herokuapp.com/letter/",
+					"protocol": "https",
+					"host": [
+						"zappts-crud",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"letter",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

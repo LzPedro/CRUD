@@ -4,8 +4,9 @@ const mongoose = require('mongoose')
 const axios = require('axios').default;
 var bodyParser = require('body-parser')
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8080 //process.env.port to work with heroku
 const url_mongo = process.env.MONGODB_URI || 'mongodb+srv://lzpedro:YVDFw2aeEvhJk6T@cluster0.kxup2.mongodb.net/rosangela?retryWrites=true&w=majority';
+// process.env.MONGODB_URI saved in heroku
 const Letter = require('./letter');
 var jsonParser = bodyParser.json()
 
@@ -13,23 +14,23 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(url_mongo)// faz a conexão com o banco de dados
+mongoose.connect(url_mongo)// connect to mongo db
   .then(_ => {
     console.log("Connected to MongoDB")
   })
 
 //CREATE
 app.post('/letter', jsonParser, (req, res, next) => {
-  let the_letter = new Letter(req.body)
+  let the_letter = new Letter(req.body)//create a letter from the http request body
   console.log("CREATE")
-  the_letter.save();
+  the_letter.save();//save in the mongo DB
   res.json(the_letter)
 })
 //READ ALL
 app.get('/letter', jsonParser, (req, res, next) => {
   //let the_letter = new Letter(req.body)
   console.log("READ ALL")
-  Letter.find().then(letters => {
+  Letter.find().then(letters => {//find all documents
     res.status(200)
     res.json(letters)
     return next()
@@ -40,11 +41,11 @@ app.get('/letter/:letter_id([0-9a-fA-F]{24})', jsonParser, (req, res, next) => {
   console.log("READ ONE")
   //let the_letter = new Letter(req.body)
   Letter.findById(req.params.letter_id).then(letters => {
-    if (letters) {//Caso o resultado não seja nulo, quer dizer que encontramos um registro para mostrar
+    if (letters) {//If not null, found a document to return
       res.status(200)
       res.json(letters)
     }
-    else {//Caso contrário, quer dizer que não encontramos um registro
+    else {//No document was found
       res.status(404)
       res.json({ message: 'not found' })
     }
@@ -56,14 +57,14 @@ app.patch('/letter/:letter_id([0-9a-fA-F]{24})', jsonParser, async (req, res, ne
   //let the_letter = new Letter(req.body)
   console.log("UPDATE")
   try {
-    let id = req.params.letter_id; //Recebendo o valor do id da URL
+    let id = req.params.letter_id; 
     //console.log(req.body)
-    let result = await Letter.findByIdAndUpdate(id, req.body).lean(); //Buscando pessoa por id e atualizando seus dados
-    if (result != null) { //Caso o resultado não seja nulo, quer dizer que encontramos um registro para atulizar e ele foi atualizado
-      let the_letter = await Letter.findById(id); //Buscamos o registro atualizado
+    let result = await Letter.findByIdAndUpdate(id, req.body).lean(); //Searching by ID and updating with the http request body
+    if (result != null) { //If not null, found and updated a document
+      let the_letter = await Letter.findById(id); //Searching the updated document
       res.status(200)
       res.json({ message: "Updated" })
-    } else {//Caso contrário, quer dizer que não encontramos um registro
+    } else {//Otherwise, no document was found
       res.status(404)
       res.json({ message: 'Not Found' })
     }
@@ -76,13 +77,13 @@ app.patch('/letter/:letter_id([0-9a-fA-F]{24})', jsonParser, async (req, res, ne
 app.del('/letter', jsonParser, async (req, res, next) => {
   console.log("DELETE")
   try {
-    let id = req.body.id; //Recebendo o valor do id da URL]
+    let id = req.body.id; 
     //console.log(id)
-    let result = await Letter.findByIdAndDelete(id);
-    if (result != null) { //Caso o resultado não seja nulo, quer dizer que encontramos um registro para excluir e ele foi excluido
+    let result = await Letter.findByIdAndDelete(id);//Searching by ID and deleting it
+    if (result != null) { //If not null, found and deleted a document
       res.status(200)
       res.json({ message: "Deleted" })
-    } else {//Caso contrário, quer dizer que não encontramos um registro
+    } else {//Otherwise, no document was found
       res.status(404)
       res.json({ result: 'Not Found' })
     }
@@ -105,6 +106,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
-
-
-console.log("Hello There!")
